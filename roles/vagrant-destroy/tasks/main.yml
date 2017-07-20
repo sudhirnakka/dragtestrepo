@@ -1,0 +1,6 @@
+---
+
+- name: Destroy vagrant boxes
+  shell: vagrant destroy -f
+  args:
+    chdir: "{{ ANSIBLE_TMP_DIR }}/{{ VAGRANT_FOLDER_NAME }}"

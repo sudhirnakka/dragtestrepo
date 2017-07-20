@@ -1,0 +1,24 @@
+---
+
+- hosts:
+    - management
+    - net_servers
+    - app_servers
+  gather_facts: yes
+
+  vars_files:
+  - {{ APPLICATION_FOLDER_NAME }}/config/switch_default.yml
+
+  tasks:
+  - name: Start Application
+    shell: "bin/appvm1 start"
+    args:
+      chdir: "/opt/transacumen/current"
+    become: true
+  - name: Check application status
+    shell: "bin/appvm1 status"
+    args:
+      chdir: "/opt/transacumen/current"
+    become: true
+  - name: Wait for application to kick in
+    wait_for: port={{ APPLICATION_PORT }} delay=5

@@ -1,0 +1,13 @@
+---
+
+- name: a play that runs entirely on the ansible host
+  hosts: localhost
+  connection: local
+
+  roles:
+    - cleanup
+    - vagrant-prepare
+    - vagrant-spawn
+    - environment-reset
+  tags:
+    - deploy

@@ -1,0 +1,8 @@
+---
+
+- include: common.yml
+- include: database.yml
+- include: {{ PREV_APPLICATION_FOLDER_NAME }}/install.yml sudo=true
+- include: application-start.yml
+- include: {{ APPLICATION_FOLDER_NAME }}/upgrade.yml sudo=true previous_version={{ PREV_APPLICATION_VERSION }}
+- include: application-start.yml

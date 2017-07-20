@@ -1,0 +1,16 @@
+---
+
+- hosts:
+    - management
+    - net_servers
+    - app_servers
+  gather_facts: yes
+
+  vars_files:
+  - inventories/{{ TOPOLOGY }}
+
+  tasks:
+  - name: Stop Application
+    shell: "bin/appvm1 stop"
+    args:
+      chdir: "/opt/transacumen/current"

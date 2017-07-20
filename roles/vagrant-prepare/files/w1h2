@@ -1,0 +1,54 @@
+##########################################################################
+# Ansible inventory file for 1x1 (1 net process, 1 app process) deployment
+##########################################################################
+
+[compute]
+#
+# The computing resources allocated to the Transacumen switch deployment.
+#
+# Format:
+# <inventory_name> <options>
+#
+# where:
+#
+# <inventory_name>   The hostname of the computing resource to be used. (Mandatory)
+# <options>          Any valid ansible inventory behavioural parameters. See <http://docs.ansible.com/ansible/intro_inventory.html#list-of-behavioral-inventory-parameters>. (Optional)
+
+app1
+
+#
+# Resource Allocation.
+#
+# The computing resources defined within the [compute] section must be allocated to roles within this topology.
+#
+# [management] host is the server from which all installation activites are performed.
+# [appvm1] contains the inventory name of the computing resource to which the appvm1 process should be deployed.
+# [netvm1] contains the inventory name of the computing resource to which the netvm1 process should be deployed.
+
+[management]
+app1
+
+[netvm1]
+net1
+
+[appvm1]
+app1
+
+######################################################
+## Configuration below this line should not be changed
+######################################################
+[w1h2:children]
+net_servers
+app_servers
+
+[net_servers:children]
+netvm1
+
+[netvm1:vars]
+process_id=1
+
+[app_servers:children]
+appvm1
+
+[appvm1:vars]
+process_id=1

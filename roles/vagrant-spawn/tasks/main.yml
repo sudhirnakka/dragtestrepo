@@ -1,0 +1,19 @@
+---
+
+- name: Execute vagrant box creation. Triggers creation of VM and installation of necessary services (Long running process..)
+  shell: "vagrant up"
+  args:
+    chdir: "{{ ANSIBLE_TMP_DIR }}/{{ VAGRANT_FOLDER_NAME }}"
+  environment:
+    TOPOLOGY: "{{ TOPOLOGY }}"
+    DYNAMIC_INVENTORY: "true"
+
+- name: Generate Dynamic Inventory file from vagrant
+  shell: "python {{ DYNAMIC_INVENTORY_SCRIPT }} > {{ DYNAMIC_INVENTORY_FILE }}"
+  args:
+    chdir: "{{ ANSIBLE_TMP_DIR }}/{{ VAGRANT_FOLDER_NAME }}"
+
+- name: Copy the dynamic inventory to ansible control node
+  copy:
+    src: "{{ ANSIBLE_TMP_DIR }}/{{ VAGRANT_FOLDER_NAME }}/{{ DYNAMIC_INVENTORY_FILE }}"
+    dest: "."

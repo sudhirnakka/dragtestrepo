@@ -1,0 +1,5 @@
+---
+
+- name: Unset session environment variables to avoid re-run collisions
+  shell: "unset {{ item }}"
+  with_items: ["TOPOLOGY", "DYNAMIC_INVENTORY"]

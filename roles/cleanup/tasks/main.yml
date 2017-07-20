@@ -1,0 +1,17 @@
+---
+
+- name: Check that the Vagrantfile exists
+  stat:
+    path: "{{ ANSIBLE_TMP_DIR }}/{{ VAGRANT_FOLDER_NAME }}/Vagrantfile"
+  register: stat_result
+
+- name: Execute vagrant box destroy
+  shell: "vagrant destroy -f"
+  args:
+    chdir: "{{ ANSIBLE_TMP_DIR }}/{{ VAGRANT_FOLDER_NAME }}"
+  when: stat_result.stat.exists == True
+
+- name: Clean up of existing directories
+  file:
+    path: "{{ ANSIBLE_TMP_DIR }}"
+    state: absent

@@ -1,0 +1,6 @@
+---
+
+- include: common.yml
+- include: database.yml
+- include: {{ APPLICATION_FOLDER_NAME }}/install.yml sudo=true
+- include: application-start.yml

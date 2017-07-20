@@ -1,0 +1,51 @@
+---
+
+- name: 1. Create temporary directory for Deployment files
+  file:
+    path: "{{ ANSIBLE_TMP_DIR }}"
+    state: directory
+
+- name: 2. Copy and expand vagrant deployment scripts
+  unarchive:
+    src: "{{ VAGRANT_PACKAGE_LOCATION }}/{{ VAGRANT_ARCHIVE_NAME }}"
+    dest: "{{ ANSIBLE_TMP_DIR }}"
+
+- name: 3.1. Copy application to vagrant path for chained deployment
+  unarchive:
+    src: "{{ APPLICATION_ARCHIVE_LOCATION }}/{{ APPLICATION_GZ_ARCHIVE_NAME }}"
+    dest: "{{ ANSIBLE_TMP_DIR }}/{{ VAGRANT_FOLDER_NAME }}"
+
+- name: 3.2. Copy previous application to vagrant path for chained deployment
+  unarchive:
+    src: "{{ APPLICATION_ARCHIVE_LOCATION }}/{{ PREV_APPLICATION_GZ_ARCHIVE_NAME }}"
+    dest: "{{ ANSIBLE_TMP_DIR }}/{{ VAGRANT_FOLDER_NAME }}"
+  when: PREV_APPLICATION_VERSION is defined and PREV_APPLICATION_VERSION != ""
+
+- name: 4.1. Replace setup playbook file in Vagrant with chained playbook
+  template:
+    src: "setup.yml.j2"
+    dest: "{{ ANSIBLE_TMP_DIR }}/{{ VAGRANT_FOLDER_NAME }}/setup.yml"
+  when: PREV_APPLICATION_VERSION is not defined or PREV_APPLICATION_VERSION == ""
+
+- name: 4.2. Replace setup playbook file in Vagrant with chained playbook
+  template:
+    src: "setup-upgrade.yml.j2"
+    dest: "{{ ANSIBLE_TMP_DIR }}/{{ VAGRANT_FOLDER_NAME }}/setup.yml"
+  when: PREV_APPLICATION_VERSION is defined and PREV_APPLICATION_VERSION != ""
+
+- name: 5. Copy application execution scripts
+  template:
+    src: "{{ item }}.yml.j2"
+    dest: "{{ ANSIBLE_TMP_DIR }}/{{ VAGRANT_FOLDER_NAME }}/{{ item }}.yml"
+  with_items: ["application-start", "application-stop"]
+
+- name: 6. Copy Vagrant to dynamic Inventory python script
+  copy:
+    src: "{{ DYNAMIC_INVENTORY_SCRIPT }}"
+    dest: "{{ ANSIBLE_TMP_DIR }}/{{ VAGRANT_FOLDER_NAME }}/{{ DYNAMIC_INVENTORY_SCRIPT }}"
+
+- name: 7. Copy {{ TOPOLOGY }} template inventory file to Vagrant folder
+  copy:
+    src: "{{ TOPOLOGY }}"
+    dest: "{{ ANSIBLE_TMP_DIR }}/{{ VAGRANT_FOLDER_NAME }}/{{ item }}"
+  with_items: ["inventory_template", "dynamicVagrantInventory"]

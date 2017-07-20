@@ -1,0 +1,11 @@
+---
+
+- name: a play that destroys local headless vagrant boxes
+  hosts: localhost
+  connection: local
+
+  roles:
+    - environment-reset
+    - cleanup
+  tags:
+    - destroy

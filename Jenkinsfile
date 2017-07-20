@@ -15,7 +15,8 @@ node {
         stage ('Execute scripts') {
           sh 'chmod +x master-installer.sh'
           // sh 'ansible-galaxy -r jenkins-test-requirements.yml -p roles/ install'
-          sh 'sh master-installer.sh -a sample-1.1-SNAPSHOT -t w1h1'
+          sh 'ansible-playbook -i env-local vagrant-deploy.yml --extra-vars "TOPOLOGY=w1h1 APPLICATION_PACKAGE_NAME=sample-1.1-SNAPSHOT"'
+          //sh './master-installer.sh -a sample-1.1-SNAPSHOT -t w1h1'
         }
     } catch (err) {
         currentBuild.result = 'FAILED'

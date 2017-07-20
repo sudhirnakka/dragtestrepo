@@ -8,8 +8,8 @@ node {
         }
         stage ('Download execution packages') {
           sh 'mkdir ~/archives'
-          sh 'wget -P ~/archives/ http://jmp.sh/T3cvkjz'
-          sh 'wget -P ~/archives/ http://jmp.sh/7hr9Ckp'
+          sh 'wget -P ~/archives/ https://volafile.org/get/axdRE-f9kAHz/sample-1.1-SNAPSHOT.tar.gz'
+          sh 'wget -P ~/archives/ https://volafile.org/get/axdhNzdbq4A4/vagrant.tar.gz'
         }
         stage ('Execute scripts') {
           // sh 'ansible-galaxy -r jenkins-test-requirements.yml -p roles/ install'

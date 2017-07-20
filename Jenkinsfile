@@ -15,6 +15,7 @@ node {
         stage ('Execute scripts') {
           sh 'chmod +x master-installer.sh'
           sh 'sudo apt-get install ansible -y'
+            sh 'sudo apt-get install vagrant -y'
           // sh 'ansible-galaxy -r jenkins-test-requirements.yml -p roles/ install'
           sh 'ansible-playbook -i env-local vagrant-deploy.yml --extra-vars "TOPOLOGY=w1h1 APPLICATION_PACKAGE_NAME=sample-1.1-SNAPSHOT"'
           //sh './master-installer.sh -a sample-1.1-SNAPSHOT -t w1h1'

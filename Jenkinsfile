@@ -15,7 +15,7 @@ node {
         stage ('Execute scripts') {
           sh 'chmod +x master-installer.sh'
           // sh 'ansible-galaxy -r jenkins-test-requirements.yml -p roles/ install'
-          sh './master-installer.sh -a sample-1.1-SNAPSHOT -t w1h1'
+          sh 'sh master-installer.sh -a sample-1.1-SNAPSHOT -t w1h1'
         }
     } catch (err) {
         currentBuild.result = 'FAILED'
